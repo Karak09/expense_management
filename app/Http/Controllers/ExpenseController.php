@@ -257,7 +257,7 @@ class ExpenseController extends Controller
                 'givetack' => $givetack
             ];
         });
-
+dd($userSummaries);
         return view('expenses.previous', compact(
             'users', 'perMeal', 'netAndOthers', 'totalMealExpense', 'totalMeals',
             'userSummaries', 'roomMasiRents', 'totalRent', 'totalMasi', 'totalElectric', 'totalBill', 'selectedMonthName','perHeadRoomRent'
