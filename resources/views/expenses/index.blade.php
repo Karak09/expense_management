@@ -291,7 +291,10 @@
 
         <!-- Dropdown Menu -->
         <div class="dropdown-menu" id="dropdownMenu">
-            <button type="button" class="dropdown-item" id="showEventModalBtn">Users</button>
+            {{-- <button type="button" class="dropdown-item" id="showEventModalBtn">Users</button> --}}
+            <button id="showEventModalBtn" data-url="{{ route('event.users') }}" class="btn btn-primary">
+                Show Registered Users
+            </button>
             <form action="{{ route('logout') }}" method="POST" class="dropdown-item">
                 @csrf
                 <button type="submit" class="btn btn-link">Logout</button>
@@ -708,54 +711,108 @@
         });
 
         //all user show in model
+        // document.getElementById('showEventModalBtn').addEventListener('click', function () {
+        //     fetch('{{ route('event.users') }}')
+        //         .then(response => response.json())
+        //         .then(users => {
+        //             let tbody = '';
+        //             users.forEach((user, index) => {
+        //             tbody += `
+        //                 <tr>
+        //                     <td>${index + 1}</td>
+        //                     <td>${user.name}</td>
+        //                     <td>${user.mobile || ''}</td>
+        //                     <td>${user.city || ''}</td>
+        //                     <td>${user.district || ''}</td>
+        //                     <td>${user.pin || ''}</td>
+        //                     <td>
+        //                         <button class="btn btn-sm btn-info edit-btn"
+        //                             data-id="${user.id}"
+        //                             data-name="${user.name}"
+        //                             data-mobile="${user.mobile || ''}"
+        //                             data-city="${user.city || ''}"
+        //                             data-district="${user.district || ''}"
+        //                             data-pin="${user.pin || ''}">
+        //                             Edit
+        //                         </button>
+        //                         <button class="btn btn-sm btn-danger" onclick="deleteUser(${user.id})">Delete</button>
+        //                     </td>
+        //                 </tr>`;
+        //             });
+
+        //             document.getElementById('userTableBody').innerHTML = tbody;
+
+        //             // Bind edit button click handlers here, AFTER table is populated
+        //             document.querySelectorAll('.edit-btn').forEach(button => {
+        //                 button.addEventListener('click', function () {
+        //                     document.getElementById('editUserId').value = this.dataset.id;
+        //                     document.getElementById('editUserName').value = this.dataset.name;
+        //                     document.getElementById('editUserMobile').value = this.dataset.mobile;
+        //                     document.getElementById('editUserCity').value = this.dataset.city;
+        //                     document.getElementById('editUserDistrict').value = this.dataset.district;
+        //                     document.getElementById('editUserPin').value = this.dataset.pin;
+        //                     new bootstrap.Modal(document.getElementById('editUserModal')).show();
+        //                 });
+        //             });
+
+        //             let modal = new bootstrap.Modal(document.getElementById('eventModal'));
+        //             modal.show();
+        //         });
+        // });
+
         document.getElementById('showEventModalBtn').addEventListener('click', function () {
-            fetch('{{ route("event.users") }}')
-                .then(response => response.json())
-                .then(users => {
-                    let tbody = '';
-                    users.forEach((user, index) => {
-                    tbody += `
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>${user.name}</td>
-                            <td>${user.mobile || ''}</td>
-                            <td>${user.city || ''}</td>
-                            <td>${user.district || ''}</td>
-                            <td>${user.pin || ''}</td>
-                            <td>
-                                <button class="btn btn-sm btn-info edit-btn"
-                                    data-id="${user.id}"
-                                    data-name="${user.name}"
-                                    data-mobile="${user.mobile || ''}"
-                                    data-city="${user.city || ''}"
-                                    data-district="${user.district || ''}"
-                                    data-pin="${user.pin || ''}">
-                                    Edit
-                                </button>
-                                <button class="btn btn-sm btn-danger" onclick="deleteUser(${user.id})">Delete</button>
-                            </td>
-                        </tr>`;
-                    });
+    const url = this.getAttribute('data-url');
 
-                    document.getElementById('userTableBody').innerHTML = tbody;
+    fetch(url)
+        .then(response => response.json())
+        .then(users => {
+            let tbody = '';
+            users.forEach((user, index) => {
+                tbody += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${user.name}</td>
+                        <td>${user.mobile || ''}</td>
+                        <td>${user.city || ''}</td>
+                        <td>${user.district || ''}</td>
+                        <td>${user.pin || ''}</td>
+                        <td>
+                            <button class="btn btn-sm btn-info edit-btn"
+                                data-id="${user.id}"
+                                data-name="${user.name}"
+                                data-mobile="${user.mobile || ''}"
+                                data-city="${user.city || ''}"
+                                data-district="${user.district || ''}"
+                                data-pin="${user.pin || ''}">
+                                Edit
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteUser(${user.id})">Delete</button>
+                        </td>
+                    </tr>`;
+            });
 
-                    // Bind edit button click handlers here, AFTER table is populated
-                    document.querySelectorAll('.edit-btn').forEach(button => {
-                        button.addEventListener('click', function () {
-                            document.getElementById('editUserId').value = this.dataset.id;
-                            document.getElementById('editUserName').value = this.dataset.name;
-                            document.getElementById('editUserMobile').value = this.dataset.mobile;
-                            document.getElementById('editUserCity').value = this.dataset.city;
-                            document.getElementById('editUserDistrict').value = this.dataset.district;
-                            document.getElementById('editUserPin').value = this.dataset.pin;
-                            new bootstrap.Modal(document.getElementById('editUserModal')).show();
-                        });
-                    });
+            document.getElementById('userTableBody').innerHTML = tbody;
 
-                    let modal = new bootstrap.Modal(document.getElementById('eventModal'));
-                    modal.show();
+            document.querySelectorAll('.edit-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    document.getElementById('editUserId').value = this.dataset.id;
+                    document.getElementById('editUserName').value = this.dataset.name;
+                    document.getElementById('editUserMobile').value = this.dataset.mobile;
+                    document.getElementById('editUserCity').value = this.dataset.city;
+                    document.getElementById('editUserDistrict').value = this.dataset.district;
+                    document.getElementById('editUserPin').value = this.dataset.pin;
+
+                    new bootstrap.Modal(document.getElementById('editUserModal')).show();
                 });
+            });
+
+            new bootstrap.Modal(document.getElementById('eventModal')).show();
+        })
+        .catch(error => {
+            console.error('Error fetching users:', error);
         });
+});
+
 
         document.getElementById('editUserForm').addEventListener('submit', function (e) {
             e.preventDefault();
